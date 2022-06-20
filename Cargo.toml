@@ -1,7 +1,11 @@
 [package]
 name = "radish"
 version = "0.0.1"
+authors = ["Kenneth Wilke <kenneth.wilke@gmail.com>"]
 edition = "2021"
+description = "A web framework built on top of Axum"
+repository = "https://github.com/KennethWilke/radish"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
