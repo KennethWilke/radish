@@ -1,0 +1,13 @@
+[package]
+name = "radish"
+version = "0.0.1"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+axum = { version = "0.4", features = ["ws"] }
+tokio = { version = "1.17.0", features = ["full"] }
+axum-server = { version = "0.3", features = ["tls-rustls"] }
+async-trait = "0.1.53"
+thiserror = "1.0.30"
