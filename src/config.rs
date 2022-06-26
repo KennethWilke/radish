@@ -9,20 +9,20 @@ pub enum ServerEncryption {
     },
 }
 
-pub struct ServerConfiguration {
+pub struct ServerConfig {
     pub addr: SocketAddr,
     pub encryption: ServerEncryption,
 }
 
-pub fn get_dev_configuration() -> ServerConfiguration {
+pub fn get_dev_configuration() -> ServerConfig {
     get_configuration(false, false)
 }
 
-pub fn get_prod_configuration() -> ServerConfiguration {
+pub fn get_prod_configuration() -> ServerConfig {
     get_configuration(true, true)
 }
 
-pub fn get_configuration(listen_all: bool, encrypted: bool) -> ServerConfiguration {
+pub fn get_configuration(listen_all: bool, encrypted: bool) -> ServerConfig {
     let port = match encrypted {
         true => 8443,
         false => 8080,
@@ -39,7 +39,7 @@ pub fn get_configuration(listen_all: bool, encrypted: bool) -> ServerConfigurati
         },
         false => ServerEncryption::Unencrypted,
     };
-    ServerConfiguration { addr, encryption }
+    ServerConfig { addr, encryption }
 }
 
 #[cfg(test)]

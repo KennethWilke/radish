@@ -1,15 +1,13 @@
-use crate::config::{ServerEncryption::*, ServerConfiguration, get_dev_configuration};
+use crate::config::{ServerConfig, ServerEncryption::*};
 use axum_server::tls_rustls::RustlsConfig;
 
 pub struct RadishServer {
-    configuration: ServerConfiguration,
+    configuration: ServerConfig,
 }
 
 impl RadishServer {
-    pub fn new() -> Self {
-        RadishServer {
-            configuration: get_dev_configuration(),
-        }
+    pub fn new(configuration: ServerConfig) -> Self {
+        RadishServer { configuration }
     }
 
     pub async fn run(&self, app: axum::Router) {
