@@ -1,31 +1,9 @@
 use anyhow::{anyhow, Result};
 pub use axum::extract::ws::WebSocket;
 pub use axum::extract::ws::WebSocketUpgrade;
-use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 
-#[derive(Serialize, Deserialize, Debug)]
-pub struct Operation {
-    pub operation: String,
-    pub parameters: HashMap<String, String>,
-}
-
-impl Operation {
-    pub fn new(operation: impl AsRef<str>) -> Self {
-        let operation = operation.as_ref().to_string();
-        let parameters = HashMap::new();
-        Operation {
-            operation,
-            parameters,
-        }
-    }
-
-    pub fn set_parameter(&mut self, key: impl AsRef<str>, value: impl AsRef<str>) {
-        let key = key.as_ref().to_string();
-        let value = value.as_ref().to_string();
-        self.parameters.insert(key, value);
-    }
-}
+mod operation;
+pub use operation::Operation;
 
 pub struct RadishWebSocket {
     pub socket: WebSocket,
@@ -52,11 +30,8 @@ impl RadishWebSocket {
     pub async fn get_operation(&mut self) -> Result<Operation> {
         let message = self.get_string().await?;
         match serde_json::from_str(message.as_str()) {
-            Ok(operation) => {
-                println!("Received operation: {:#?}", operation);
-                Ok(operation)
-            }
-            _ => return Err(anyhow!("NYI")),
+            Ok(operation) => Ok(operation),
+            Err(error) => return Err(anyhow!(error)),
         }
     }
 
@@ -68,13 +43,12 @@ impl RadishWebSocket {
             .await
         {
             Ok(_) => Ok(()),
-            Err(_) => Err(anyhow!("Websocket client disconnected")),
+            Err(error) => Err(anyhow!(error)),
         }
     }
 
     pub async fn send_operation(&mut self, operation: Operation) -> Result<()> {
         let message = serde_json::to_string(&operation).unwrap();
-        println!("Sending operation: {}", message);
         self.send_string(message).await
     }
 }

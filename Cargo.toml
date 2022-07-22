@@ -1,6 +1,6 @@
 [package]
 name = "radish"
-version = "0.0.2"
+version = "0.0.3"
 authors = ["Kenneth Wilke <kenneth.wilke@gmail.com>"]
 edition = "2021"
 description = "A web framework built on top of Axum"
