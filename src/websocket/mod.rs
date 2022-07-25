@@ -3,7 +3,8 @@ pub use axum::extract::ws::WebSocket;
 pub use axum::extract::ws::WebSocketUpgrade;
 
 mod operation;
-pub use operation::Operation;
+
+pub use operation::{Operation, OperationReply};
 
 pub struct RadishWebSocket {
     pub socket: WebSocket,
@@ -27,14 +28,6 @@ impl RadishWebSocket {
         }
     }
 
-    pub async fn get_operation(&mut self) -> Result<Operation> {
-        let message = self.get_string().await?;
-        match serde_json::from_str(message.as_str()) {
-            Ok(operation) => Ok(operation),
-            Err(error) => return Err(anyhow!(error)),
-        }
-    }
-
     pub async fn send_string(&mut self, message: impl AsRef<str>) -> Result<()> {
         let message = message.as_ref().to_string();
         match self
@@ -47,8 +40,29 @@ impl RadishWebSocket {
         }
     }
 
+    pub async fn get_operation(&mut self) -> Result<Operation> {
+        let message = self.get_string().await?;
+        match serde_json::from_str(message.as_str()) {
+            Ok(operation) => Ok(operation),
+            Err(error) => return Err(anyhow!(error)),
+        }
+    }
+
     pub async fn send_operation(&mut self, operation: Operation) -> Result<()> {
         let message = serde_json::to_string(&operation).unwrap();
+        self.send_string(message).await
+    }
+
+    pub async fn get_reply(&mut self) -> Result<OperationReply> {
+        let message = self.get_string().await?;
+        match serde_json::from_str(message.as_str()) {
+            Ok(reply) => Ok(reply),
+            Err(error) => return Err(anyhow!(error)),
+        }
+    }
+
+    pub async fn send_reply(&mut self, reply: OperationReply) -> Result<()> {
+        let message = serde_json::to_string(&reply).unwrap();
         self.send_string(message).await
     }
 }
