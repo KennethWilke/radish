@@ -1,10 +1,7 @@
 use anyhow::{anyhow, Result};
 pub use axum::extract::ws::WebSocket;
 pub use axum::extract::ws::WebSocketUpgrade;
-
-mod operation;
-
-pub use operation::{Operation, OperationReply};
+pub use exosphere_core::{Operation, OperationReply};
 
 pub struct RadishWebSocket {
     pub socket: WebSocket,
