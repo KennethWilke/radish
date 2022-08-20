@@ -1,6 +1,6 @@
 [package]
 name = "radish"
-version = "0.0.5"
+version = "0.0.6"
 authors = ["Kenneth Wilke <kenneth.wilke@gmail.com>"]
 edition = "2021"
 description = "A light web framework built on top of Axum"
@@ -12,11 +12,11 @@ license = "MIT"
 
 [dependencies]
 tokio = { version = "1.17.0", features = ["full"] }
-axum = { version = "0.4", features = ["ws"] }
+axum = { version = "0.5.13", features = ["ws"] }
 axum-server = { version = "0.3", features = ["tls-rustls"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 async-trait = "0.1.53"
 thiserror = "1.0.30"
 anyhow = "1"
-exosphere-core = "0.0.1"
+exosphere-core = "0.0.2"

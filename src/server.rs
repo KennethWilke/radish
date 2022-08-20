@@ -1,3 +1,5 @@
+use std::net::SocketAddr;
+
 use crate::config::{ServerConfig, ServerEncryption::*};
 use axum_server::tls_rustls::RustlsConfig;
 
@@ -17,7 +19,7 @@ impl RadishServer {
                 println!("Running WITHOUT ENCRYPTION\nListening on {}", addr);
 
                 axum::Server::bind(&addr)
-                    .serve(app.into_make_service())
+                    .serve(app.into_make_service_with_connect_info::<SocketAddr>())
                     .await
                     .unwrap();
             }
